@@ -4,11 +4,23 @@ import classes from "./Navigation.module.scss";
 export default function Navigation() {
   return (
     <div className={classes.navigation}>
-      <NavLink className={classes.link} to="/">
-        Game
+      <NavLink
+        className={classes.link}
+        to="/game"
+      >
+        Игра
       </NavLink>
-      <NavLink className={classes.link} to="/rules">
-        Rules
+      <NavLink
+        className={classes.link}
+        to="/rules"
+      >
+        Правила
+      </NavLink>
+      <NavLink
+        className={classes.link}
+        to="/options"
+      >
+        Настройки
       </NavLink>
     </div>
   );

@@ -1,6 +1,10 @@
-import { useAppSelector } from "../../hooks/redux";
+import PointsTable from "../../components/points-table/PointsTable";
+import classes from "./GameField.module.scss";
 
 export default function GameField() {
-  const {} = useAppSelector((state) => state.gameReducer);
-  return <div>GameField</div>;
+  return (
+    <div className={classes.wrapper}>
+      <PointsTable />
+    </div>
+  );
 }

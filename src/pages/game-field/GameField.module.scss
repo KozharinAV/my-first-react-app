@@ -1,0 +1,10 @@
+@import "../../common/scss/constants.scss";
+
+.wrapper {
+  width: 85%;
+  height: 85vh;
+  box-shadow: $shadow;
+  margin: 100px auto 30px auto;
+  border-radius: 50px;
+  padding: 20px;
+}

@@ -1,26 +1,35 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { Game } from "../../models/IGame";
-import { User } from "../../models/IUser";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { Turn } from "../../models/commonModels";
 
 interface GameState {
-    player: User;
-    opponent: User;
-    game: Game;
+  penaltyLimit: number;
+  currentTurn: Turn;
+  currentCard: number;
 }
 
 const initialState: GameState = {
-    player: new User(),
-    opponent: new User(),
-    game: new Game()
-
+  penaltyLimit: localStorage.getItem("penaltyLimit")
+    ? parseInt(localStorage.getItem("penaltyLimit") as string)
+    : 5,
+  currentTurn: localStorage.getItem("currentTurn")
+    ? (localStorage.getItem("currentTurn") as Turn)
+    : Math.round(Math.random()) === 0
+    ? Turn.PLAYER
+    : Turn.OPPONENT,
+  currentCard: localStorage.getItem("currentCard")
+    ? parseInt(localStorage.getItem("currentCard") as string)
+    : -1,
 };
 
 export const gameSlice = createSlice({
-    name: 'game',
-    initialState,
-    reducers: {
-
-    }
+  name: "game",
+  initialState,
+  reducers: {
+    setPenaltyLimit(state, action: PayloadAction<number>) {
+      state.penaltyLimit = action.payload;
+      localStorage.setItem("penaltyLimit", action.payload.toString());
+    },
+  },
 });
 
 export default gameSlice.reducer;
