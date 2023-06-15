@@ -7,7 +7,6 @@ export default function Options() {
   const { penaltyLimit } = useAppSelector((state) => state.gameReducer);
   const { setPenaltyLimit } = gameSlice.actions;
   const dispatch = useAppDispatch();
-
   const limitChanged = (value: number) => dispatch(setPenaltyLimit(value));
 
   return (
