@@ -7,4 +7,14 @@
   margin: 100px auto 30px auto;
   border-radius: 50px;
   padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 80px;
+}
+
+.aside {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

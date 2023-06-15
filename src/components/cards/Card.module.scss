@@ -1,0 +1,28 @@
+@import "../../common/scss/constants.scss";
+
+.card {
+  width: 150px;
+  height: 220px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+  border: none;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 0 10px 8px $dark;
+}
+
+.card:hover {
+  scale: 1.05;
+  box-shadow: 0 0 10px 0px $dark;
+}
+
+.card:disabled:hover {
+  scale: 1;
+  cursor: not-allowed;
+  box-shadow: 0 0 10px 8px $dark;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+}

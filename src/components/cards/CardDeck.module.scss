@@ -1,0 +1,14 @@
+@import "../../common/scss/constants.scss";
+
+.image {
+  width: 150px;
+  height: 220px;
+  border-radius: 20px;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 170px;
+  height: 220px;
+}
