@@ -1,7 +1,7 @@
 import { useAppSelector } from "../../hooks/redux";
-import classes from "./PointsTable.module.scss";
+import classes from "./PointsPlate.module.scss";
 
-export default function PointsTable() {
+export default function PointsPlate() {
   const { penaltyLimit } = useAppSelector((state) => state.gameReducer);
   const { human, computer } = useAppSelector((state) => state.usersReducer);
 
