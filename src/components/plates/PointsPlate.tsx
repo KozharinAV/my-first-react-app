@@ -1,17 +1,19 @@
-import { useAppSelector } from "../../hooks/redux";
 import classes from "./PointsPlate.module.scss";
 
-export default function PointsPlate() {
-  const { penaltyLimit } = useAppSelector((state) => state.gameReducer);
-  const { human, computer } = useAppSelector((state) => state.usersReducer);
+interface PropType {
+  penaltyLimit: number;
+  leftPoints: number;
+  rightPoints: number;
+}
 
+export default function PointsPlate({ penaltyLimit, leftPoints, rightPoints }: PropType) {
   return (
     <div className={classes.table}>
       <span>ИГРА ДО {penaltyLimit} ОЧКОВ</span>
       <div className={classes.points}>
-        <span>{human.penaltyPoints}</span>
+        <span>{leftPoints}</span>
         <span className={classes.dash}>-</span>
-        <span>{computer.penaltyPoints}</span>
+        <span>{rightPoints}</span>
       </div>
     </div>
   );

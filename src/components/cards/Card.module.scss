@@ -9,6 +9,7 @@
   overflow: hidden;
   cursor: pointer;
   box-shadow: 0 0 10px 8px $dark;
+  z-index: 10;
 }
 
 .card:hover {

@@ -6,6 +6,7 @@ interface GameState {
   currentTurn: Turn;
   currentCard: number;
 }
+const getFirstTurn = () => (Math.round(Math.random()) === 0 ? Turn.HUMAN : Turn.COMPUTER);
 
 const initialState: GameState = {
   penaltyLimit: localStorage.getItem("penaltyLimit")
@@ -13,9 +14,7 @@ const initialState: GameState = {
     : 5,
   currentTurn: localStorage.getItem("currentTurn")
     ? (localStorage.getItem("currentTurn") as Turn)
-    : Math.round(Math.random()) === 0
-    ? Turn.HUMAN
-    : Turn.COMPUTER,
+    : Turn.NONE,
   currentCard: localStorage.getItem("currentCard")
     ? parseInt(localStorage.getItem("currentCard") as string)
     : -1,
@@ -25,15 +24,24 @@ export const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
+    setInitialGameState(state) {
+      state.currentCard = -1;
+      state.currentTurn = getFirstTurn();
+    },
+
     setPenaltyLimit(state, action: PayloadAction<number>) {
       state.penaltyLimit = action.payload;
       localStorage.setItem("penaltyLimit", action.payload.toString());
     },
+
     setCurrentTurn(state, action: PayloadAction<Turn>) {
       state.currentTurn = action.payload;
+      localStorage.setItem("currentTurn", action.payload);
     },
+
     setCurrentCard(state, action: PayloadAction<number>) {
       state.currentCard = action.payload;
+      localStorage.setItem("currentCard", action.payload.toString());
     },
   },
 });

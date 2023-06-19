@@ -14,6 +14,7 @@
   background-color: $header-background;
   height: 50px;
   transition: $default-transition;
+  z-index: 20;
 }
 .header:hover {
   height: 65px;

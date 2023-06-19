@@ -7,19 +7,18 @@ interface PropType {
   disabled: boolean;
   onClick(card: number): void;
 }
-export default function CardDeck({
-  cards,
-  renderType,
-  disabled,
-  onClick,
-}: PropType) {
+
+const CARD_WIDTH = 150;
+const OFFSET = 3;
+
+export default function CardDeck({ cards, renderType, disabled, onClick }: PropType) {
   const style = (index: number) => {
     if (index === 0) {
       return { marginRight: 0, marginLeft: 0 };
     }
     return renderType === "right"
-      ? { marginLeft: -150 - index / 6 }
-      : { marginLeft: -150 + index / 6 };
+      ? { marginLeft: -(CARD_WIDTH + OFFSET) }
+      : { marginLeft: -(CARD_WIDTH - OFFSET) };
   };
 
   return (

@@ -1,0 +1,16 @@
+@import "../../common/scss/constants.scss";
+
+.plate {
+  width: 150px;
+  height: 50px;
+  border-radius: 15px;
+  padding: 5px;
+  background-color: $header-background;
+  box-shadow: 0 0 10px 2px $dark;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 21px;
+  font-weight: 700;
+  text-align: center;
+}
