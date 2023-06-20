@@ -9,9 +9,14 @@ interface PropType {
 }
 
 const CARD_WIDTH = 150;
-const OFFSET = 3;
+const OFFSET = 2;
 
-export default function CardDeck({ cards, renderType, disabled, onClick }: PropType) {
+export default function CardDeck({
+  cards,
+  renderType,
+  disabled,
+  onClick,
+}: PropType) {
   const style = (index: number) => {
     if (index === 0) {
       return { marginRight: 0, marginLeft: 0 };
