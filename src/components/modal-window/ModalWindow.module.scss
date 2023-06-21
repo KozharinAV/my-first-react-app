@@ -1,0 +1,31 @@
+@import "../../common/scss/constants.scss";
+
+.background {
+  background-color: $dark;
+  opacity: 0.5;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal {
+  position: absolute;
+  border-radius: 20px;
+  top: 30vh;
+  left: calc(50vw - 250px);
+  width: 500px;
+  height: fit-content;
+  background-color: $background-day;
+  padding: 10px 20px 30px 20px;
+  display: flex;
+  gap: 30px;
+  margin: 0 auto;
+  flex-direction: column;
+  align-items: center;
+  z-index: 40;
+}

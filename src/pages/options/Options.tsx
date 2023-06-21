@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import classes from "./Options.module.scss";
-import CustomInput from "../custom-input/CustomInput";
+import CustomInput from "../../components/custom-input/CustomInput";
 import { gameSlice } from "../../store/reducers/GameSlice";
 
 export default function Options() {
@@ -13,10 +13,7 @@ export default function Options() {
     <div className={classes.options}>
       <h1>Настройки</h1>
       <h2 className={classes.label}>Количество штрафных очков</h2>
-      <CustomInput
-        value={penaltyLimit}
-        change={limitChanged}
-      />
+      <CustomInput value={penaltyLimit} change={limitChanged} />
     </div>
   );
 }

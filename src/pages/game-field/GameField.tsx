@@ -1,87 +1,54 @@
 import CustomButton from "../../components/buttons/CustomButton";
 import Card from "../../components/cards/Card";
-import CardDeck from "../../components/cards/CardDeck";
 import DefenceHand from "../../components/cards/DefenceHand";
 import PointsPlate from "../../components/plates/PointsPlate";
-import TextPlate from "../../components/plates/TextPlate";
-import { checkTurn, compareCards } from "../../helpers/cardHandlers";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { useAppSelector } from "../../hooks/redux";
 import { Turn } from "../../models/commonModels";
-import { gameSlice } from "../../store/reducers/GameSlice";
-import { usersSlice } from "../../store/reducers/UsersSlice";
 import classes from "./GameField.module.scss";
-import { useEffect } from "react";
 import { useComputerTurn } from "../../hooks/computerTurn";
+import { useHumanTurn } from "../../hooks/humanTurn";
+import { useGamePlay } from "../../hooks/gamePlay";
+import DeckField from "../../components/deck-field/DeckField";
+import ModalWindow from "../../components/modal-window/ModalWindow";
+import { ReactNode } from "react";
 
 export default function GameField() {
-  const { currentCard, currentTurn, penaltyLimit } = useAppSelector(
+  const { currentCard, currentTurn, penaltyLimit, winner } = useAppSelector(
     (state) => state.gameReducer
   );
   const { human, computer } = useAppSelector((state) => state.usersReducer);
-  const { setCurrentCard, setInitialGameState, setCurrentTurn } =
-    gameSlice.actions;
-  const {
-    removeFirstCard,
-    addCardsToPlayersDeck,
-    fillDefenceHand,
-    setInitialUsersState,
-    removeDefenceCard,
-    incrementPenaltyPoints,
-  } = usersSlice.actions;
-  const dispatch = useAppDispatch();
+
+  const [humanDeckClicked, computerDefenceClicked] = useHumanTurn();
 
   useComputerTurn();
 
-  useEffect(() => {
-    if (
-      computer.defenceHand.find((card) => card >= 0) === undefined &&
-      currentTurn === Turn.HUMAN
-    ) {
-      dispatch(setCurrentTurn(Turn.COMPUTER));
-      dispatch(incrementPenaltyPoints(Turn.COMPUTER));
-      dispatch(fillDefenceHand(Turn.COMPUTER));
-    }
-  }, [computer.defenceHand]);
+  const startClicked = useGamePlay();
 
-  const humanDeckClicked = (card: number) => {
-    dispatch(setCurrentCard(card));
-    dispatch(removeFirstCard(Turn.HUMAN));
-    //if all cards in computer defence are equal currentCard the card is placed back to the deck and a new turn is made
-    if (checkTurn(card, computer.defenceHand) === 0) {
-      setTimeout(() => {
-        dispatch(addCardsToPlayersDeck({ turn: Turn.HUMAN, cards: [card] }));
-        dispatch(setCurrentCard(-1));
-      }, 1000);
-    }
+  const humanDeckDisabled = currentTurn !== Turn.HUMAN || currentCard >= 0;
+  const computerDefenceDisabled =
+    currentTurn === Turn.COMPUTER || currentCard < 0;
+  const newGameButtonVisibility =
+    currentTurn === Turn.HUMAN ? "visible" : "hidden";
 
-    if (checkTurn(card, computer.defenceHand) === -1) {
-      setTimeout(() => {
-        dispatch(setCurrentTurn(Turn.COMPUTER));
-        dispatch(addCardsToPlayersDeck({ turn: Turn.COMPUTER, cards: [card] }));
-        dispatch(setCurrentCard(-1));
-        dispatch(fillDefenceHand(Turn.COMPUTER));
-      }, 1000);
+  const modalContent = (): ReactNode => {
+    let modalMessage = "";
+    let buttonMessage = "";
+    if (winner === Turn.NONE) {
+      modalMessage = 'Игра "Cтенка на стенку"';
+      buttonMessage = "Начать игру";
+    } else if (winner === Turn.HUMAN) {
+      modalMessage = "Вы победили, поздравляю!";
+      buttonMessage = "Начать сначала";
+    } else {
+      modalMessage = "Вы проиграли, не расстраивайтесь";
+      buttonMessage = "Начать сначала";
     }
-  };
-
-  const computerDefenceClicked = (index: number) => {
-    if (compareCards(currentCard, computer.defenceHand[index]) === 1) {
-      dispatch(
-        addCardsToPlayersDeck({
-          turn: currentTurn,
-          cards: [currentCard, computer.defenceHand[index]],
-        })
-      );
-      dispatch(removeDefenceCard({ turn: Turn.COMPUTER, index }));
-      dispatch(setCurrentCard(-1));
-    }
-  };
-
-  const startClicked = () => {
-    dispatch(setInitialGameState());
-    dispatch(setInitialUsersState());
-    dispatch(fillDefenceHand(Turn.COMPUTER));
-    dispatch(fillDefenceHand(Turn.HUMAN));
+    return (
+      <>
+        <h2>{modalMessage}</h2>
+        <CustomButton text={buttonMessage} onClick={startClicked} />
+      </>
+    );
   };
   return (
     <>
@@ -93,23 +60,15 @@ export default function GameField() {
       <main className={classes.wrapper}>
         {/* Human field */}
         <aside className={classes.aside}>
-          <div className={classes.deck}>
-            <TextPlate
-              text={`Карт в колоде ${human.cards.length}`}
-              visibility="visible"
-            />
-            <CardDeck
-              cards={human.cards}
-              renderType="left"
-              disabled={currentTurn !== Turn.HUMAN || currentCard >= 0}
-              onClick={humanDeckClicked}
-            />
+          <DeckField
+            cards={human.cards}
+            deckRenderType="left"
+            disabled={humanDeckDisabled}
+            onClick={humanDeckClicked}
+            turnText="Ваш ход"
+            turnVisibility={currentTurn === Turn.HUMAN ? "visible" : "hidden"}
+          />
 
-            <TextPlate
-              text={"Ваш ход"}
-              visibility={currentTurn === Turn.HUMAN ? "visible" : "hidden"}
-            />
-          </div>
           <DefenceHand
             defenceHand={human.defenceHand}
             disabled={true}
@@ -119,33 +78,37 @@ export default function GameField() {
         <div>
           <Card type={currentCard} disabled={true} onClick={() => {}} />
         </div>
+
         {/* Computer field */}
         <aside className={classes.aside}>
           <DefenceHand
             defenceHand={computer.defenceHand}
-            disabled={currentTurn === Turn.COMPUTER || currentCard < 0}
+            disabled={computerDefenceDisabled}
             cardClicked={computerDefenceClicked}
           />
-          <div className={classes.deck}>
-            <TextPlate
-              text={`Карт в колоде ${computer.cards.length}`}
-              visibility="visible"
-            />
-            <CardDeck
-              cards={computer.cards}
-              renderType="right"
-              disabled={true}
-              onClick={() => {}}
-            />
-            <TextPlate
-              text={"Ход соперника"}
-              visibility={currentTurn === Turn.COMPUTER ? "visible" : "hidden"}
-            />
-          </div>
+
+          <DeckField
+            cards={computer.cards}
+            deckRenderType="right"
+            disabled={true}
+            onClick={() => {}}
+            turnText="Ход соперника"
+            turnVisibility={
+              currentTurn === Turn.COMPUTER ? "visible" : "hidden"
+            }
+          />
         </aside>
       </main>
-      <div className={classes.button}>
-        <CustomButton text="Начать игру" onClick={startClicked} />
+      <ModalWindow visible={currentTurn === Turn.NONE}>
+        {modalContent()}
+      </ModalWindow>
+      <div
+        className={classes.button}
+        style={{
+          visibility: newGameButtonVisibility,
+        }}
+      >
+        <CustomButton text="Начать сначала" onClick={startClicked} />
       </div>
     </>
   );

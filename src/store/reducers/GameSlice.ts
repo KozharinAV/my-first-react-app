@@ -5,6 +5,7 @@ interface GameState {
   penaltyLimit: number;
   currentTurn: Turn;
   currentCard: number;
+  winner: Turn;
 }
 const getFirstTurn = () => (Math.round(Math.random()) === 0 ? Turn.HUMAN : Turn.COMPUTER);
 
@@ -14,6 +15,7 @@ const initialState: GameState = {
     : 5,
   currentTurn: Turn.NONE,
   currentCard: -1,
+  winner: Turn.NONE
 };
 
 export const gameSlice = createSlice({
@@ -23,6 +25,7 @@ export const gameSlice = createSlice({
     setInitialGameState(state) {
       state.currentCard = -1;
       state.currentTurn = getFirstTurn();
+      state.winner = Turn.NONE;
     },
 
     setPenaltyLimit(state, action: PayloadAction<number>) {
@@ -37,6 +40,10 @@ export const gameSlice = createSlice({
     setCurrentCard(state, action: PayloadAction<number>) {
       state.currentCard = action.payload;
     },
+
+    setWinner(state, action: PayloadAction<Turn>) {
+      state.winner = action.payload;
+    }
   },
 });
 

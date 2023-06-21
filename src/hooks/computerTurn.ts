@@ -6,17 +6,12 @@ import { gameSlice } from "../store/reducers/GameSlice";
 import { usersSlice } from "../store/reducers/UsersSlice";
 import { useEffect } from "react";
 import { chooseCardToStrike } from "../helpers/computerLogic";
-
-
-const turnStep = (callback: Function) => setTimeout(callback, 1000);
+import { turnStep } from "../helpers/userHandlers";
 
 export function useComputerTurn() {
-    const { currentTurn, currentCard } = useAppSelector(
-        (state) => state.gameReducer
-    );
+    const { currentTurn, currentCard, penaltyLimit } = useAppSelector((state) => state.gameReducer);
     const { human, computer } = useAppSelector((state) => state.usersReducer);
-    const { setCurrentCard, setCurrentTurn } =
-        gameSlice.actions;
+    const { setCurrentCard, setCurrentTurn } = gameSlice.actions;
     const {
         removeFirstCard,
         addCardsToPlayersDeck,
@@ -26,19 +21,22 @@ export function useComputerTurn() {
     } = usersSlice.actions;
     const dispatch = useAppDispatch();
 
+    const changeTurn = (penalty: "penalty" | "no-penalty") => {
+        dispatch(setCurrentTurn(Turn.HUMAN));
+        dispatch(fillDefenceHand(Turn.HUMAN));
+        if (penalty === "penalty") dispatch(incrementPenaltyPoints(Turn.HUMAN));
+    };
+
+    const grabCards = (turn: Turn, cards: Array<number>) => {
+        dispatch(addCardsToPlayersDeck({ turn: turn, cards: cards }));
+        dispatch(setCurrentCard(-1));
+    };
+
     useEffect(() => {
-        if (
-            human.defenceHand.find((card) => card >= 0) === undefined &&
-            currentTurn === Turn.COMPUTER
-        ) {
-            dispatch(setCurrentTurn(Turn.HUMAN));
-            dispatch(incrementPenaltyPoints(Turn.HUMAN));
-            dispatch(fillDefenceHand(Turn.HUMAN));
-        }
-        if (
-            human.defenceHand.find((card) => card >= 0) !== undefined &&
-            currentTurn === Turn.COMPUTER
-        ) putCurrentCard();
+        if (currentTurn === Turn.COMPUTER && computer.penaltyPoints !== penaltyLimit)
+            human.defenceHand.find((card) => card >= 0) === undefined
+                ? changeTurn("penalty")
+                : putCurrentCard();
     }, [human.defenceHand, currentTurn]);
 
     useEffect(() => {
@@ -48,28 +46,26 @@ export function useComputerTurn() {
 
     const putCurrentCard = () => {
         turnStep(() => {
-            dispatch(setCurrentCard(computer.cards[0]));
-            dispatch(removeFirstCard(Turn.COMPUTER));
+            if (computer.cards.length) {
+                dispatch(setCurrentCard(computer.cards[0]));
+                dispatch(removeFirstCard(Turn.COMPUTER));
+            }
         });
     };
     const checkDefence = (turnCard: number) => {
         turnStep(() => {
             if (checkTurn(turnCard, human.defenceHand) === 1) {
                 const indexToStrike = chooseCardToStrike(turnCard, human.defenceHand);
-                dispatch(addCardsToPlayersDeck({ turn: Turn.COMPUTER, cards: [turnCard, human.defenceHand[indexToStrike]] }));
+                grabCards(Turn.COMPUTER, [turnCard, human.defenceHand[indexToStrike]]);
                 dispatch(removeDefenceCard({ turn: Turn.HUMAN, index: indexToStrike }));
-                dispatch(setCurrentCard(-1));
             }
             if (checkTurn(turnCard, human.defenceHand) === 0) {
-                dispatch(addCardsToPlayersDeck({ turn: Turn.COMPUTER, cards: [turnCard] }));
-                dispatch(setCurrentCard(-1));
+                grabCards(Turn.COMPUTER, [turnCard]);
                 putCurrentCard();
             }
             if (checkTurn(turnCard, human.defenceHand) === -1) {
-                dispatch(addCardsToPlayersDeck({ turn: Turn.HUMAN, cards: [turnCard] }));
-                dispatch(setCurrentCard(-1));
-                dispatch(setCurrentTurn(Turn.HUMAN));
-                dispatch(fillDefenceHand(Turn.HUMAN));
+                grabCards(Turn.HUMAN, [turnCard]);
+                changeTurn("no-penalty");
             }
         });
     };

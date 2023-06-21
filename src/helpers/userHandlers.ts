@@ -26,8 +26,10 @@ export const getInitialPlayer = (): Player => {
   }
   const shuffledCards = shuffle(cards);
   return {
-    cards: shuffledCards,
+    cards: shuffledCards.slice(0, 4),
     penaltyPoints: 0,
     defenceHand: new Array<number>(3).fill(-1),
   };
 };
+
+export const turnStep = (callback: Function) => setTimeout(callback, 1000);

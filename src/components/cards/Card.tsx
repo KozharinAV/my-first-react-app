@@ -32,11 +32,7 @@ export default function Card({ type, disabled, onClick }: PropType) {
       disabled={disabled || type === -1}
       onClick={onClick}
     >
-      <img
-        className={classes.image}
-        src={cardImage()}
-        alt={`${type}`}
-      />
+      <img className={classes.image} src={cardImage()} alt={`${type}`} />
     </button>
   );
 }
