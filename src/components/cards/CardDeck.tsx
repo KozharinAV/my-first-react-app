@@ -37,8 +37,8 @@ export default function CardDeck({
           className={classes.image}
           style={style(index)}
           src={Images.CARD}
-          alt="Cards"
-          key={index * card}
+          alt={card.toString()}
+          key={index}
         />
       ))}
     </button>
