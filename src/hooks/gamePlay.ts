@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "./redux";
-import { Turn } from "../models/commonModels";
+import { Messages, Turn } from "../models/commonModels";
 import { gameSlice } from "../store/reducers/GameSlice";
 import { usersSlice } from "../store/reducers/UsersSlice";
 import { useEffect } from "react";
@@ -7,7 +7,7 @@ import { useEffect } from "react";
 export function useGamePlay() {
     const { human, computer } = useAppSelector((state) => state.usersReducer);
     const { penaltyLimit, currentCard, currentTurn } = useAppSelector((state) => state.gameReducer);
-    const { setCurrentTurn, setInitialGameState, setWinner } = gameSlice.actions;
+    const { setCurrentTurn, setInitialGameState, setWinner, setHintText } = gameSlice.actions;
     const {
         fillDefenceHand,
         setInitialUsersState
@@ -36,5 +36,11 @@ export function useGamePlay() {
         if (currentTurn === Turn.COMPUTER && currentCard === -1 && !computer.cards.length) endGame(Turn.HUMAN);
     }, [currentTurn, currentCard, human.cards, computer.cards]);
 
+    useEffect(() => {
+        if (currentTurn === Turn.NONE) dispatch(setHintText(""));
+        if (currentTurn === Turn.COMPUTER) dispatch(setHintText(Messages.COMPUTERS_TURN));
+        if (currentTurn === Turn.HUMAN && currentCard === -1) dispatch(setHintText(Messages.MAKE_TURN));
+        if (currentTurn === Turn.HUMAN && currentCard >= 0) dispatch(setHintText(Messages.CHOOSE_CARD));
+    }, [currentTurn, currentCard]);
     return startClicked;
 }

@@ -26,7 +26,7 @@ export const getInitialPlayer = (): Player => {
   }
   const shuffledCards = shuffle(cards);
   return {
-    cards: shuffledCards.slice(0, 4),
+    cards: shuffledCards,
     penaltyPoints: 0,
     defenceHand: new Array<number>(3).fill(-1),
   };

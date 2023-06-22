@@ -2,15 +2,20 @@ import classes from "./TextPlate.module.scss";
 
 interface PropType {
   text: string;
-  visibility: "visible" | "hidden";
+  visible: boolean;
+  size: "fixed" | "flexible";
 }
 
-export default function TextPlate({ text, visibility }: PropType) {
+export default function TextPlate({ text, visible, size }: PropType) {
+  const plateClass =
+    size === "fixed"
+      ? `${classes.plate}`
+      : `${classes.plate} ${classes.flexible}`;
+
+  const visibility = visible ? "visible" : "hidden";
+
   return (
-    <div
-      className={classes.plate}
-      style={{ visibility: visibility }}
-    >
+    <div className={plateClass} style={{ visibility: visibility }}>
       {text}
     </div>
   );

@@ -5,7 +5,7 @@ import classes from "./DeckField.module.scss";
 interface PropType {
   cards: Array<number>;
   disabled: boolean;
-  turnVisibility: "visible" | "hidden";
+  turnVisibility: boolean;
   turnText: string;
   deckRenderType: "right" | "left";
   onClick(card: number): void;
@@ -21,7 +21,11 @@ export default function DeckField({
 }: PropType) {
   return (
     <div className={classes.deck}>
-      <TextPlate text={`Карт в колоде ${cards.length}`} visibility="visible" />
+      <TextPlate
+        text={`Карт в колоде ${cards.length}`}
+        visible={true}
+        size="fixed"
+      />
 
       <CardDeck
         cards={cards}
@@ -30,7 +34,7 @@ export default function DeckField({
         onClick={onClick}
       />
 
-      <TextPlate text={turnText} visibility={turnVisibility} />
+      <TextPlate text={turnText} visible={turnVisibility} size="fixed" />
     </div>
   );
 }

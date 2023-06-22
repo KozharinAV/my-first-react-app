@@ -1,0 +1,28 @@
+@import "../../common/scss/constants.scss";
+
+.wrapper {
+  width: 130px;
+  height: 35px;
+  border-radius: 7px;
+  background-color: $header-background;
+  display: flex;
+  cursor: pointer;
+}
+
+.inner {
+  width: 65px;
+  height: 100%;
+  border-radius: 7px;
+  background-color: $untoggled;
+  transition: all 0.5s ease;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.toggled {
+  transform: translateX(65px);
+  background-color: $input-background;
+}

@@ -11,11 +11,12 @@ import { useGamePlay } from "../../hooks/gamePlay";
 import DeckField from "../../components/deck-field/DeckField";
 import ModalWindow from "../../components/modal-window/ModalWindow";
 import { ReactNode } from "react";
+import { endGameMessages } from "../../helpers/messageGenerator";
+import TextPlate from "../../components/plates/TextPlate";
 
 export default function GameField() {
-  const { currentCard, currentTurn, penaltyLimit, winner } = useAppSelector(
-    (state) => state.gameReducer
-  );
+  const { currentCard, currentTurn, penaltyLimit, winner, hints, hintText } =
+    useAppSelector((state) => state.gameReducer);
   const { human, computer } = useAppSelector((state) => state.usersReducer);
 
   const [humanDeckClicked, computerDefenceClicked] = useHumanTurn();
@@ -25,24 +26,15 @@ export default function GameField() {
   const startClicked = useGamePlay();
 
   const humanDeckDisabled = currentTurn !== Turn.HUMAN || currentCard >= 0;
+
   const computerDefenceDisabled =
     currentTurn === Turn.COMPUTER || currentCard < 0;
+
   const newGameButtonVisibility =
     currentTurn === Turn.HUMAN ? "visible" : "hidden";
 
   const modalContent = (): ReactNode => {
-    let modalMessage = "";
-    let buttonMessage = "";
-    if (winner === Turn.NONE) {
-      modalMessage = 'Игра "Cтенка на стенку"';
-      buttonMessage = "Начать игру";
-    } else if (winner === Turn.HUMAN) {
-      modalMessage = "Вы победили, поздравляю!";
-      buttonMessage = "Начать сначала";
-    } else {
-      modalMessage = "Вы проиграли, не расстраивайтесь";
-      buttonMessage = "Начать сначала";
-    }
+    const [modalMessage, buttonMessage] = endGameMessages(winner);
     return (
       <>
         <h2>{modalMessage}</h2>
@@ -50,6 +42,7 @@ export default function GameField() {
       </>
     );
   };
+
   return (
     <>
       <PointsPlate
@@ -66,7 +59,7 @@ export default function GameField() {
             disabled={humanDeckDisabled}
             onClick={humanDeckClicked}
             turnText="Ваш ход"
-            turnVisibility={currentTurn === Turn.HUMAN ? "visible" : "hidden"}
+            turnVisibility={currentTurn === Turn.HUMAN}
           />
 
           <DefenceHand
@@ -93,15 +86,15 @@ export default function GameField() {
             disabled={true}
             onClick={() => {}}
             turnText="Ход соперника"
-            turnVisibility={
-              currentTurn === Turn.COMPUTER ? "visible" : "hidden"
-            }
+            turnVisibility={currentTurn === Turn.COMPUTER}
           />
         </aside>
       </main>
+
       <ModalWindow visible={currentTurn === Turn.NONE}>
         {modalContent()}
       </ModalWindow>
+
       <div
         className={classes.button}
         style={{
@@ -109,6 +102,11 @@ export default function GameField() {
         }}
       >
         <CustomButton text="Начать сначала" onClick={startClicked} />
+      </div>
+
+      {/* Hints */}
+      <div className={classes.hints}>
+        <TextPlate text={hintText} visible={hints} size="flexible" />
       </div>
     </>
   );
