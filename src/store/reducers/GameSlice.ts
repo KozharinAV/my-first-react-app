@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Turn } from "../../models/commonModels";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { Turn } from '../../models/game-models';
 
 interface GameState {
   penaltyLimit: number;
@@ -12,20 +12,20 @@ interface GameState {
 const getFirstTurn = () => (Math.round(Math.random()) === 0 ? Turn.HUMAN : Turn.COMPUTER);
 
 const initialState: GameState = {
-  penaltyLimit: localStorage.getItem("penaltyLimit")
-    ? parseInt(localStorage.getItem("penaltyLimit") as string)
+  penaltyLimit: localStorage.getItem('penaltyLimit')
+    ? parseInt(localStorage.getItem('penaltyLimit') as string)
     : 5,
-  hints: localStorage.getItem("hints")
-    ? JSON.parse(localStorage.getItem("hints") as string)
+  hints: localStorage.getItem('hints')
+    ? JSON.parse(localStorage.getItem('hints') as string)
     : false,
-  hintText: "",
+  hintText: '',
   currentTurn: Turn.NONE,
   currentCard: -1,
-  winner: Turn.NONE
+  winner: Turn.NONE,
 };
 
 export const gameSlice = createSlice({
-  name: "game",
+  name: 'game',
   initialState,
   reducers: {
     setInitialGameState(state) {
@@ -36,12 +36,12 @@ export const gameSlice = createSlice({
 
     setPenaltyLimit(state, action: PayloadAction<number>) {
       state.penaltyLimit = action.payload;
-      localStorage.setItem("penaltyLimit", action.payload.toString());
+      localStorage.setItem('penaltyLimit', action.payload.toString());
     },
 
     setHints(state) {
       state.hints = !state.hints;
-      localStorage.setItem("hints", JSON.stringify(state.hints));
+      localStorage.setItem('hints', JSON.stringify(state.hints));
     },
 
     setHintText(state, action: PayloadAction<string>) {
@@ -58,7 +58,7 @@ export const gameSlice = createSlice({
 
     setWinner(state, action: PayloadAction<Turn>) {
       state.winner = action.payload;
-    }
+    },
   },
 });
 

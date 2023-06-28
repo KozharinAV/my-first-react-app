@@ -1,6 +1,7 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Player, Turn } from "../../models/commonModels";
-import { getInitialPlayer } from "../../helpers/userHandlers";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { Player } from '../../models/player-models';
+import { Turn } from '../../models/game-models';
+import { getInitialPlayer } from '../../helpers/userHandlers';
 
 interface PlayersState {
   human: Player;
@@ -13,7 +14,7 @@ const initialState: PlayersState = {
 };
 
 export const usersSlice = createSlice({
-  name: "users",
+  name: 'users',
   initialState,
   reducers: {
     setInitialUsersState(state) {

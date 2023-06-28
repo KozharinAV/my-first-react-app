@@ -1,4 +1,4 @@
-import { Player } from "../models/commonModels";
+import { Player } from '../models/messages';
 
 const shuffle = (array: Array<number>): Array<number> => {
   const shuffledArray = [...array];

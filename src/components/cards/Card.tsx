@@ -1,6 +1,6 @@
-import { Images } from "../../models/commonModels";
-import classes from "./Card.module.scss";
-import { useMemo } from "react";
+import { Images } from '../../models/image-paths';
+import classes from './Card.module.scss';
+import { useMemo } from 'react';
 
 interface PropType {
   type: number;
@@ -24,7 +24,7 @@ export default function Card({ type, disabled, onClick }: PropType) {
       case 4:
         return Images.CARD_FOUR;
       default:
-        return "";
+        return '';
     }
   };
 

@@ -1,10 +1,10 @@
-import { useCallback, useMemo } from "react";
-import { Images } from "../../models/commonModels";
-import classes from "./CardDeck.module.scss";
+import { useCallback, useMemo } from 'react';
+import { Images } from '../../models/image-paths';
+import classes from './CardDeck.module.scss';
 
 interface PropType {
   cards: Array<number>;
-  renderType: "right" | "left";
+  renderType: 'right' | 'left';
   disabled: boolean;
   onClick(card: number): void;
 }
@@ -13,12 +13,11 @@ const CARD_WIDTH = 150;
 const OFFSET = 2;
 
 export default function CardDeck({ cards, renderType, disabled, onClick }: PropType) {
-  const style = (): object => {
-    return renderType === "right"
+  const style = useMemo((): object => {
+    return renderType === 'right'
       ? { marginLeft: -(CARD_WIDTH + OFFSET) }
       : { marginLeft: -(CARD_WIDTH - OFFSET) };
-  };
-  const memoStyle = useMemo(() => style(), [cards.length, disabled]);
+  }, [cards.length, disabled]);
   const deckClicked = useCallback(() => onClick(cards[0]), [onClick]);
 
   return (
@@ -39,7 +38,7 @@ export default function CardDeck({ cards, renderType, disabled, onClick }: PropT
           return (
             <img
               className={classes.image}
-              style={memoStyle}
+              style={style}
               src={Images.CARD}
               alt={card.toString()}
               key={index}
