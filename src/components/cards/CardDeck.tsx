@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from "react";
 import { Images } from "../../models/commonModels";
 import classes from "./CardDeck.module.scss";
 
@@ -11,36 +12,40 @@ interface PropType {
 const CARD_WIDTH = 150;
 const OFFSET = 2;
 
-export default function CardDeck({
-  cards,
-  renderType,
-  disabled,
-  onClick,
-}: PropType) {
-  const style = (index: number) => {
-    if (index === 0) {
-      return { marginRight: 0, marginLeft: 0 };
-    }
+export default function CardDeck({ cards, renderType, disabled, onClick }: PropType) {
+  const style = (): object => {
     return renderType === "right"
       ? { marginLeft: -(CARD_WIDTH + OFFSET) }
       : { marginLeft: -(CARD_WIDTH - OFFSET) };
   };
+  const memoStyle = useMemo(() => style(), [cards.length, disabled]);
+  const deckClicked = useCallback(() => onClick(cards[0]), [onClick]);
 
   return (
     <button
       className={classes.wrapper}
-      onClick={() => onClick(cards[0])}
+      onClick={deckClicked}
       disabled={disabled}
     >
-      {cards.map((card, index) => (
-        <img
-          className={classes.image}
-          style={style(index)}
-          src={Images.CARD}
-          alt={card.toString()}
-          key={index}
-        />
-      ))}
+      <img
+        className={classes.image}
+        style={{ marginRight: 0, marginLeft: 0 }}
+        src={Images.CARD}
+        alt={cards[0].toString()}
+      />
+
+      {cards.map((card, index) => {
+        if (index > 0)
+          return (
+            <img
+              className={classes.image}
+              style={memoStyle}
+              src={Images.CARD}
+              alt={card.toString()}
+              key={index}
+            />
+          );
+      })}
     </button>
   );
 }

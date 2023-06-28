@@ -1,5 +1,6 @@
 import { Images } from "../../models/commonModels";
 import classes from "./Card.module.scss";
+import { useMemo } from "react";
 
 interface PropType {
   type: number;
@@ -8,7 +9,7 @@ interface PropType {
 }
 
 export default function Card({ type, disabled, onClick }: PropType) {
-  const cardImage = (): string => {
+  const setCardImage = (type: number): string => {
     switch (type) {
       case -1:
         return Images.CARD;
@@ -26,13 +27,20 @@ export default function Card({ type, disabled, onClick }: PropType) {
         return "";
     }
   };
+
+  const cardImage = useMemo(() => setCardImage(type), [type]);
+
   return (
     <button
       className={classes.card}
       disabled={disabled || type === -1}
       onClick={onClick}
     >
-      <img className={classes.image} src={cardImage()} alt={`${type}`} />
+      <img
+        className={classes.image}
+        src={cardImage}
+        alt={`${type}`}
+      />
     </button>
   );
 }
