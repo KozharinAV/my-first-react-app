@@ -1,10 +1,10 @@
-import { checkTurn } from '../helpers/cardHandlers';
+import { checkTurn } from '../helpers/card-handlers';
 import { useAppDispatch, useAppSelector } from './redux';
 import { Turn } from '../models/game-models';
 import { gameSlice } from '../store/reducers/GameSlice';
 import { usersSlice } from '../store/reducers/UsersSlice';
 import { useEffect } from 'react';
-import { chooseCardToStrike } from '../helpers/computerLogic';
+import { chooseCardToStrike } from '../helpers/computer-logic';
 import { turnStep } from '../helpers/userHandlers';
 
 export function useComputerTurn() {

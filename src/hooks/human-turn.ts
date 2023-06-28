@@ -1,4 +1,4 @@
-import { checkTurn, compareCards } from '../helpers/cardHandlers';
+import { checkTurn, compareCards } from '../helpers/card-handlers';
 import { useAppDispatch, useAppSelector } from './redux';
 import { Turn } from '../models/game-models';
 import { gameSlice } from '../store/reducers/GameSlice';

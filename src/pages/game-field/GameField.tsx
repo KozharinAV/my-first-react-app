@@ -5,12 +5,12 @@ import PointsPlate from '../../components/plates/PointsPlate';
 import { useAppSelector } from '../../hooks/redux';
 import { Turn } from '../../models/game-models';
 import classes from './GameField.module.scss';
-import { useComputerTurn } from '../../hooks/computerTurn';
-import { useHumanTurn } from '../../hooks/humanTurn';
-import { useGamePlay } from '../../hooks/gamePlay';
+import { useComputerTurn } from '../../hooks/computer-turn';
+import { useHumanTurn } from '../../hooks/human-turn';
+import { useGamePlay } from '../../hooks/game-play';
 import DeckField from '../../components/deck-field/DeckField';
 import ModalWindow from '../../components/modal-window/ModalWindow';
-import { endGameMessages } from '../../helpers/messageGenerator';
+import { endGameMessages } from '../../helpers/message-generator';
 import TextPlate from '../../components/plates/TextPlate';
 
 function ModalContent() {
