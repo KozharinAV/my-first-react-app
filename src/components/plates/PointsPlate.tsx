@@ -16,16 +16,17 @@ const Plate = styled('div')`
   left: calc(50vw - 100px);
   top: 8vh;
   width: 200px;
-  height: 12vh;
+  height: 110px;
   border-radius: 20px;
   padding: 5px;
   background-color: ${headerBackground};
-  box-shadow: 0 0 10px 2px $dark;
+  box-shadow: 0 0 10px 2px black;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-size: 20px;
   animation: appearing 1s;
+
   @keyframes appearing {
     from {
       scale: 0.2;
@@ -50,13 +51,14 @@ const Points = styled('div', { shouldForwardProp: (prop) => !['red'].includes(pr
   align-items: center;
   font-size: 70px;
   line-height: 75px;
-  font-weight: 600;
+  font-weight: var(--font-weight);
+
   & .dash {
     padding-bottom: 10px;
   }
 `;
 
-const animatePlate = (id: string) => {
+const animateElement = (id: string) => {
   const element = document.getElementById(id);
   if (element)
     element!.animate(
@@ -71,7 +73,7 @@ const animatePlate = (id: string) => {
 
 export default function PointsPlate({ penaltyLimit, leftPoints, rightPoints }: PropType) {
   useEffect(() => {
-    if (leftPoints !== 0 || rightPoints !== 0) animatePlate('points');
+    if (leftPoints || rightPoints) animateElement('points');
   }, [leftPoints, rightPoints]);
 
   return (

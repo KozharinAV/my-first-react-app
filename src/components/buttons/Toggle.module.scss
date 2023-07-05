@@ -1,4 +1,4 @@
-@import "../../common/scss/constants.scss";
+@import '../../common/scss/constants.scss';
 
 .wrapper {
   width: 130px;
@@ -16,7 +16,7 @@
   background-color: $untoggled;
   transition: all 0.5s ease;
   font-size: 22px;
-  font-weight: 700;
+  font-weight: var(--font-weight);
   display: flex;
   justify-content: center;
   align-items: center;

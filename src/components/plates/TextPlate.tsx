@@ -7,7 +7,10 @@ interface PropType {
 }
 
 export default function TextPlate({ text, visible, size }: PropType) {
-  const plateClass = size === 'fixed' ? `${classes.plate}` : `${classes.plate} ${classes.flexible}`;
+  const plateClass =
+    size === 'fixed'
+      ? `${classes.plate} ${classes.animated}`
+      : `${classes.plate} ${classes.flexible}`;
 
   const visibility = visible ? 'visible' : 'hidden';
 

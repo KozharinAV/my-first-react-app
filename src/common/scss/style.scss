@@ -1,11 +1,13 @@
-@import "./constants.scss";
-@import "./breakpoints.scss";
+@import './constants.scss';
+@import './breakpoints.scss';
 
 #root {
   width: 100%;
   margin: 0;
   padding: 0;
   color: $main-text-color;
+
+  --font-weight: 700;
 }
 * {
   box-sizing: border-box;
@@ -26,7 +28,7 @@
   }
 
   /* Firefox */
-  input[type="number"] {
+  input[type='number'] {
     -moz-appearance: textfield !important;
   }
 }
@@ -67,5 +69,5 @@ h2 {
 
 button {
   font-family: $main-text;
-  font-weight: 700;
+  font-weight: var(--font-weight);
 }
