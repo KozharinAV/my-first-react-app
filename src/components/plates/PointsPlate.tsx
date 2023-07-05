@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { useEffect } from 'react';
 
 interface PropType {
   penaltyLimit: number;
@@ -24,6 +25,18 @@ const Plate = styled('div')`
   flex-direction: column;
   align-items: center;
   font-size: 20px;
+  animation: appearing 1s;
+  @keyframes appearing {
+    from {
+      scale: 0.2;
+    }
+    50% {
+      scale: 1.2;
+    }
+    to {
+      scale: 1;
+    }
+  }
 `;
 
 const Points = styled('div', { shouldForwardProp: (prop) => !['red'].includes(prop) })<{
@@ -38,17 +51,33 @@ const Points = styled('div', { shouldForwardProp: (prop) => !['red'].includes(pr
   font-size: 70px;
   line-height: 75px;
   font-weight: 600;
-
   & .dash {
     padding-bottom: 10px;
   }
 `;
 
+const animatePlate = (id: string) => {
+  const element = document.getElementById(id);
+  if (element)
+    element!.animate(
+      [
+        { scale: 1, color: 'black' },
+        { scale: 1.2, color: 'red' },
+        { scale: 1, color: 'black' },
+      ],
+      500
+    );
+};
+
 export default function PointsPlate({ penaltyLimit, leftPoints, rightPoints }: PropType) {
+  useEffect(() => {
+    if (leftPoints !== 0 || rightPoints !== 0) animatePlate('points');
+  }, [leftPoints, rightPoints]);
+
   return (
     <Plate>
       <span>ИГРА ДО {penaltyLimit} ОЧКОВ</span>
-      <Points>
+      <Points id="points">
         <span>{leftPoints}</span>
         <span className="dash">-</span>
         <span>{rightPoints}</span>

@@ -13,8 +13,20 @@
   font-size: 21px;
   font-weight: 700;
   text-align: center;
+  transition: all ease 1s;
+  animation: drag 1s;
 }
 
+@keyframes drag {
+  from {
+    transform: rotate(0deg);
+    scale: 0.2;
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
 .flexible {
   width: 100%;
   height: fit-content;
