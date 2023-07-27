@@ -16,6 +16,7 @@ export default function Options() {
   const hintsChanged = () => dispatch(setHints())
 
   //Random gif
+  console.log(import.meta.env.MODE)
   const { data } = gifApi.useFetchRandonGifQuery("")
   const [randomGifOpen, setRandomGifOpen] = useState(false)
   const showRandomGif = () => {
