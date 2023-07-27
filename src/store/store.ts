@@ -12,15 +12,18 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { gifApi } from '../services/gifService';
 
 const persistConfig = {
   key: 'root',
   storage,
+  blacklist: ['gifApi'],
 };
 
 const rootReducer = combineReducers({
   gameReducer,
   usersReducer,
+  [gifApi.reducerPath]: gifApi.reducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -32,7 +35,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    }).concat(gifApi.middleware),
 });
 
 export const persistor = persistStore(store);
